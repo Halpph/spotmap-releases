@@ -133,6 +133,14 @@
     .foot { margin-top: 40px; font-size: 13px; color: var(--muted); text-align: center; }
     .foot a { color: var(--accent-2); text-decoration: none; }
     .foot a:hover { text-decoration: underline; }
+    .langs { margin-top: 18px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .langs button {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+      padding: 6px 10px; border-radius: 999px; cursor: pointer;
+    }
+    .langs button:hover { color: var(--text); border-color: #3a3648; }
+    .langs button[aria-current="true"] { color: #fff; background: rgba(124, 92, 255, 0.25); border-color: rgba(124, 92, 255, 0.6); }
 
     @media (max-width: 680px) {
       .wrap { padding-top: 40px; }
@@ -155,15 +163,15 @@
         <img class="icon" src="./icon-512.png" width="200" height="200" alt="SpotMap app icon: a capybara holding a disco ball over a neon city map" />
       </div>
       <div class="hero-text">
-        <div class="eyebrow">Android · free</div>
+        <div class="eyebrow" data-i18n="eyebrow">Android · free</div>
         <h1>SpotMap</h1>
-        <p class="tag">See where your friends are and what's happening this weekend — on one live map.</p>
+        <p class="tag" data-i18n="tag">See where your friends are and what's happening this weekend — on one live map.</p>
         <div class="cta">
           <a class="btn" id="download" href="https://github.com/Halpph/spotmap-releases/releases/latest/download/spotmap.apk">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-            Download for Android
+            <span data-i18n="btn">Download for Android</span>
           </a>
-          <div class="ver" id="version">Latest release</div>
+          <div class="ver" id="version" data-i18n="ver">Latest release</div>
         </div>
       </div>
     </section>
@@ -179,52 +187,203 @@
     <section class="features" aria-label="Features">
       <div class="feat" style="--glow: var(--accent-2)">
         <div class="ico">🗺️</div>
-        <h3>One live map</h3>
-        <p>Friends' pins, the way they're facing, and every plan for the weekend — all in one place.</p>
+        <h3 data-i18n="f1t">One live map</h3>
+        <p data-i18n="f1b">Friends' pins, the way they're facing, and every plan for the weekend — all in one place.</p>
       </div>
       <div class="feat" style="--glow: var(--pink)">
         <div class="ico">🔗</div>
-        <h3>Share a link, get a plan</h3>
-        <p>Share an event from Instagram, Resident Advisor or Eventbrite and SpotMap fills in the venue, time and cover.</p>
+        <h3 data-i18n="f2t">Share a link, get a plan</h3>
+        <p data-i18n="f2b">Share an event from Instagram, Resident Advisor or Eventbrite and SpotMap fills in the venue, time and cover.</p>
       </div>
       <div class="feat" style="--glow: var(--mint)">
         <div class="ico">🪩</div>
-        <h3>Who's going</h3>
-        <p>Tap a plan to see the roster, join in, and get a nudge when friends post something new.</p>
+        <h3 data-i18n="f3t">Who's going</h3>
+        <p data-i18n="f3b">Tap a plan to see the roster, join in, and get a nudge when friends post something new.</p>
       </div>
       <div class="feat" style="--glow: var(--accent)">
         <div class="ico">🔒</div>
-        <h3>Your circle only</h3>
-        <p>Location is shared with accepted friends, stops when you say so, and your account can be deleted in one tap.</p>
+        <h3 data-i18n="f4t">Your circle only</h3>
+        <p data-i18n="f4b">Location is shared with accepted friends, stops when you say so, and your account can be deleted in one tap.</p>
       </div>
     </section>
 
     <section class="card">
-      <h2>Installing</h2>
+      <h2 data-i18n="inst">Installing</h2>
       <ol class="steps">
-        <li><div>Tap <strong>Download for Android</strong> above and open <span>spotmap.apk</span> when it finishes.</div></li>
-        <li><div>Android asks to allow <span>“Install unknown apps”</span> for your browser the first time — allow it, then tap <strong>Install</strong>.</div></li>
-        <li><div>If Play Protect shows a warning, choose <span>“Install anyway”</span>. That's normal for apps outside the Play Store.</div></li>
+        <li><div data-i18n-html="s1">Tap <strong>Download for Android</strong> above and open <span>spotmap.apk</span> when it finishes.</div></li>
+        <li><div data-i18n-html="s2">Android asks to allow <span>“Install unknown apps”</span> for your browser the first time — allow it, then tap <strong>Install</strong>.</div></li>
+        <li><div data-i18n-html="s3">If Play Protect shows a warning, choose <span>“Install anyway”</span>. That's normal for apps outside the Play Store.</div></li>
       </ol>
-      <p class="note">Updates: the app tells you when a new version is out and brings you back here. Downloading again upgrades in place.</p>
+      <p class="note" data-i18n="note">Updates: the app tells you when a new version is out and brings you back here. Downloading again upgrades in place.</p>
     </section>
 
     <p class="foot">
-      <a href="https://github.com/Halpph/spotmap-releases/releases">All versions</a>
-      &nbsp;·&nbsp; <a href="./privacy.html">Privacy Policy</a>
-      &nbsp;·&nbsp; iPhone not supported yet.
+      <a href="https://github.com/Halpph/spotmap-releases/releases" data-i18n="all">All versions</a>
+      &nbsp;·&nbsp; <a href="./privacy.html" data-i18n="priv">Privacy Policy</a>
+      &nbsp;·&nbsp; <span data-i18n="ios">iPhone not supported yet.</span>
     </p>
+    <nav class="langs" id="langs" aria-label="Language"></nav>
   </main>
 
   <script>
-    // Newest release tag + date, straight from the GitHub API (public repo).
+    // ---- i18n -------------------------------------------------------------
+    // English is baked into the HTML (works without JS); other languages are
+    // swapped in by key. Order: ?lang=xx → saved choice → browser language → en.
+    var I18N = {
+      en: {
+        name: 'EN', title: 'SpotMap — download for Android',
+        desc: "SpotMap — see where your friends are and what's happening this weekend, on one live map. Download the Android app.",
+        eyebrow: 'Android · free',
+        tag: "See where your friends are and what's happening this weekend — on one live map.",
+        btn: 'Download for Android', ver: 'Latest release',
+        f1t: 'One live map', f1b: "Friends' pins, the way they're facing, and every plan for the weekend — all in one place.",
+        f2t: 'Share a link, get a plan', f2b: 'Share an event from Instagram, Resident Advisor or Eventbrite and SpotMap fills in the venue, time and cover.',
+        f3t: "Who's going", f3b: 'Tap a plan to see the roster, join in, and get a nudge when friends post something new.',
+        f4t: 'Your circle only', f4b: 'Location is shared with accepted friends, stops when you say so, and your account can be deleted in one tap.',
+        inst: 'Installing',
+        s1: 'Tap <strong>Download for Android</strong> above and open <span>spotmap.apk</span> when it finishes.',
+        s2: 'Android asks to allow <span>“Install unknown apps”</span> for your browser the first time — allow it, then tap <strong>Install</strong>.',
+        s3: "If Play Protect shows a warning, choose <span>“Install anyway”</span>. That's normal for apps outside the Play Store.",
+        note: 'Updates: the app tells you when a new version is out and brings you back here. Downloading again upgrades in place.',
+        all: 'All versions', priv: 'Privacy Policy', ios: 'iPhone not supported yet.'
+      },
+      it: {
+        name: 'IT', title: 'SpotMap — scarica per Android',
+        desc: "SpotMap — guarda dove sono i tuoi amici e cosa succede questo weekend, su un'unica mappa live. Scarica l'app per Android.",
+        eyebrow: 'Android · gratis',
+        tag: "Guarda dove sono i tuoi amici e cosa succede questo weekend — su un'unica mappa live.",
+        btn: 'Scarica per Android', ver: 'Ultima versione',
+        f1t: 'Una sola mappa live', f1b: 'I pin degli amici, la direzione in cui guardano e tutti i piani del weekend — tutto in un unico posto.',
+        f2t: 'Condividi un link, ottieni un piano', f2b: 'Condividi un evento da Instagram, Resident Advisor o Eventbrite e SpotMap compila locale, orario e copertina.',
+        f3t: 'Chi viene', f3b: 'Tocca un piano per vedere chi partecipa, unisciti e ricevi una notifica quando gli amici pubblicano qualcosa di nuovo.',
+        f4t: 'Solo la tua cerchia', f4b: "La posizione è condivisa solo con gli amici accettati, si interrompe quando vuoi tu e puoi eliminare l'account con un tocco.",
+        inst: 'Installazione',
+        s1: 'Tocca <strong>Scarica per Android</strong> qui sopra e apri <span>spotmap.apk</span> a download completato.',
+        s2: 'La prima volta Android chiede di consentire <span>“Installa app sconosciute”</span> per il browser — consenti, poi tocca <strong>Installa</strong>.',
+        s3: 'Se Play Protect mostra un avviso, scegli <span>“Installa comunque”</span>. È normale per le app fuori dal Play Store.',
+        note: "Aggiornamenti: l'app ti avvisa quando esce una nuova versione e ti riporta qui. Scaricando di nuovo si aggiorna senza disinstallare.",
+        all: 'Tutte le versioni', priv: 'Privacy policy', ios: 'iPhone non ancora supportato.'
+      },
+      es: {
+        name: 'ES', title: 'SpotMap — descarga para Android',
+        desc: 'SpotMap — mira dónde están tus amigos y qué pasa este fin de semana, en un solo mapa en vivo. Descarga la app para Android.',
+        eyebrow: 'Android · gratis',
+        tag: 'Mira dónde están tus amigos y qué pasa este fin de semana — en un solo mapa en vivo.',
+        btn: 'Descargar para Android', ver: 'Última versión',
+        f1t: 'Un solo mapa en vivo', f1b: 'Los pines de tus amigos, hacia dónde miran y todos los planes del fin de semana — todo en un mismo lugar.',
+        f2t: 'Comparte un enlace, crea un plan', f2b: 'Comparte un evento de Instagram, Resident Advisor o Eventbrite y SpotMap rellena el lugar, la hora y la portada.',
+        f3t: 'Quién va', f3b: 'Toca un plan para ver quién va, únete y recibe un aviso cuando tus amigos publiquen algo nuevo.',
+        f4t: 'Solo tu círculo', f4b: 'La ubicación se comparte solo con amigos aceptados, se detiene cuando tú quieras y puedes borrar tu cuenta con un toque.',
+        inst: 'Instalación',
+        s1: 'Toca <strong>Descargar para Android</strong> arriba y abre <span>spotmap.apk</span> cuando termine.',
+        s2: 'La primera vez Android pide permitir <span>“Instalar apps desconocidas”</span> para tu navegador — permítelo y toca <strong>Instalar</strong>.',
+        s3: 'Si Play Protect muestra una advertencia, elige <span>“Instalar de todos modos”</span>. Es normal en apps fuera de Play Store.',
+        note: 'Actualizaciones: la app te avisa cuando hay una nueva versión y te trae de vuelta aquí. Al descargar de nuevo se actualiza sin desinstalar.',
+        all: 'Todas las versiones', priv: 'Política de privacidad', ios: 'iPhone aún no compatible.'
+      },
+      pt: {
+        name: 'PT', title: 'SpotMap — baixe para Android',
+        desc: 'SpotMap — veja onde estão os seus amigos e o que acontece neste fim de semana, em um único mapa ao vivo. Baixe o app para Android.',
+        eyebrow: 'Android · grátis',
+        tag: 'Veja onde estão os seus amigos e o que acontece neste fim de semana — em um único mapa ao vivo.',
+        btn: 'Baixar para Android', ver: 'Última versão',
+        f1t: 'Um único mapa ao vivo', f1b: 'Os pins dos seus amigos, a direção para onde olham e todos os planos do fim de semana — tudo em um só lugar.',
+        f2t: 'Compartilhe um link, ganhe um plano', f2b: 'Compartilhe um evento do Instagram, Resident Advisor ou Eventbrite e o SpotMap preenche local, horário e capa.',
+        f3t: 'Quem vai', f3b: 'Toque em um plano para ver quem vai, participe e receba um aviso quando seus amigos publicarem algo novo.',
+        f4t: 'Só o seu círculo', f4b: 'A localização é compartilhada apenas com amigos aceitos, para quando você quiser, e a conta pode ser excluída com um toque.',
+        inst: 'Instalação',
+        s1: 'Toque em <strong>Baixar para Android</strong> acima e abra o <span>spotmap.apk</span> quando terminar.',
+        s2: 'Na primeira vez, o Android pede para permitir <span>“Instalar apps desconhecidos”</span> no seu navegador — permita e toque em <strong>Instalar</strong>.',
+        s3: 'Se o Play Protect mostrar um aviso, escolha <span>“Instalar mesmo assim”</span>. Isso é normal para apps fora da Play Store.',
+        note: 'Atualizações: o app avisa quando sai uma nova versão e traz você de volta aqui. Baixar de novo atualiza sem desinstalar.',
+        all: 'Todas as versões', priv: 'Política de privacidade', ios: 'iPhone ainda não suportado.'
+      },
+      fr: {
+        name: 'FR', title: 'SpotMap — télécharger pour Android',
+        desc: "SpotMap — voyez où sont vos amis et ce qui se passe ce week-end, sur une seule carte en direct. Téléchargez l'appli Android.",
+        eyebrow: 'Android · gratuit',
+        tag: 'Voyez où sont vos amis et ce qui se passe ce week-end — sur une seule carte en direct.',
+        btn: 'Télécharger pour Android', ver: 'Dernière version',
+        f1t: 'Une seule carte en direct', f1b: 'Les repères de vos amis, la direction dans laquelle ils regardent et tous les plans du week-end — au même endroit.',
+        f2t: 'Partagez un lien, obtenez un plan', f2b: "Partagez un événement depuis Instagram, Resident Advisor ou Eventbrite et SpotMap remplit le lieu, l'heure et la couverture.",
+        f3t: 'Qui vient', f3b: 'Touchez un plan pour voir qui participe, rejoignez-le et recevez une alerte quand vos amis publient du nouveau.',
+        f4t: 'Votre cercle uniquement', f4b: "La position n'est partagée qu'avec les amis acceptés, s'arrête quand vous le décidez, et votre compte se supprime en un geste.",
+        inst: 'Installation',
+        s1: 'Touchez <strong>Télécharger pour Android</strong> ci-dessus et ouvrez <span>spotmap.apk</span> une fois le téléchargement terminé.',
+        s2: "La première fois, Android demande d'autoriser <span>« Installer des applis inconnues »</span> pour votre navigateur — autorisez, puis touchez <strong>Installer</strong>.",
+        s3: "Si Play Protect affiche un avertissement, choisissez <span>« Installer quand même »</span>. C'est normal pour les applis hors Play Store.",
+        note: "Mises à jour : l'appli vous prévient quand une nouvelle version sort et vous ramène ici. Retélécharger met à jour sans désinstaller.",
+        all: 'Toutes les versions', priv: 'Politique de confidentialité', ios: 'iPhone pas encore pris en charge.'
+      }
+    };
+    var LANGS = ['en', 'it', 'es', 'pt', 'fr'];
+    var lang = 'en';
+    var release = null; // { tag, published_at } once the GitHub API answers
+
+    function pickLang() {
+      var q = new URLSearchParams(location.search).get('lang');
+      if (q && I18N[q]) return q;
+      try { var saved = localStorage.getItem('lang'); if (saved && I18N[saved]) return saved; } catch (e) {}
+      var prefs = navigator.languages || [navigator.language || 'en'];
+      for (var i = 0; i < prefs.length; i++) {
+        var code = String(prefs[i]).slice(0, 2).toLowerCase();
+        if (I18N[code]) return code;
+      }
+      return 'en';
+    }
+
+    function renderVersion() {
+      var el = document.getElementById('version');
+      if (!release) { el.textContent = I18N[lang].ver; return; }
+      var date = release.published_at
+        ? new Date(release.published_at).toLocaleDateString(lang, { year: 'numeric', month: 'short', day: 'numeric' })
+        : '';
+      el.innerHTML = '<strong>' + release.tag + '</strong>' + (date ? ' · ' + date : '');
+    }
+
+    function applyLang(code) {
+      lang = I18N[code] ? code : 'en';
+      var t = I18N[lang];
+      document.documentElement.lang = lang;
+      document.title = t.title;
+      var md = document.querySelector('meta[name="description"]');
+      if (md) md.setAttribute('content', t.desc);
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n');
+        if (k !== 'ver' && t[k]) el.textContent = t[k];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n-html');
+        if (t[k]) el.innerHTML = t[k];
+      });
+      renderVersion();
+      document.querySelectorAll('#langs button').forEach(function (b) {
+        b.setAttribute('aria-current', b.getAttribute('data-lang') === lang ? 'true' : 'false');
+      });
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+
+    (function buildSwitcher() {
+      var nav = document.getElementById('langs');
+      LANGS.forEach(function (code) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('data-lang', code);
+        b.setAttribute('lang', code);
+        b.textContent = I18N[code].name;
+        b.addEventListener('click', function () { applyLang(code); });
+        nav.appendChild(b);
+      });
+    })();
+    applyLang(pickLang());
+
+    // ---- Newest release tag + date, straight from the GitHub API (public repo).
     fetch('https://api.github.com/repos/Halpph/spotmap-releases/releases/latest')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (rel) {
         if (!rel || !rel.tag_name) return;
-        var el = document.getElementById('version');
-        var date = rel.published_at ? new Date(rel.published_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
-        el.innerHTML = '<strong>' + rel.tag_name + '</strong>' + (date ? ' · ' + date : '');
+        release = { tag: rel.tag_name, published_at: rel.published_at };
+        renderVersion();
       })
       .catch(function () { /* leave the fallback text */ });
 
