@@ -130,6 +130,25 @@
     .steps span { color: var(--muted); }
     .note { margin-top: 14px; font-size: 13px; color: var(--muted); }
 
+    /* Changelog (filled from the GitHub Releases API; hidden until it answers) */
+    .changelog { display: none; }
+    .changelog.has { display: block; }
+    .rel { padding: 16px 0; border-top: 1px solid var(--border); }
+    .rel:first-of-type { border-top: 0; padding-top: 0; }
+    .rel:last-of-type { padding-bottom: 0; }
+    .rel-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+    .rel-tag { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+    .rel-date { font-size: 13px; color: var(--muted); }
+    .rel-new {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 999px; color: #b8a8ff;
+      background: rgba(124, 92, 255, 0.18); border: 1px solid rgba(124, 92, 255, 0.35);
+    }
+    .rel ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+    .rel li, .rel p { font-size: 14px; color: var(--muted); margin: 0; }
+    .rel li::marker { color: var(--accent-2); }
+    .rel p + p, .rel p + ul, .rel ul + p { margin-top: 6px; }
+
     .foot { margin-top: 40px; font-size: 13px; color: var(--muted); text-align: center; }
     .foot a { color: var(--accent-2); text-decoration: none; }
     .foot a:hover { text-decoration: underline; }
@@ -217,6 +236,11 @@
       <p class="note" data-i18n="note">Updates: the app tells you when a new version is out and brings you back here. Downloading again upgrades in place.</p>
     </section>
 
+    <section class="card changelog" id="changelog" aria-label="Changelog">
+      <h2 data-i18n="chlog">What's new</h2>
+      <div id="releases"></div>
+    </section>
+
     <p class="foot">
       <a href="https://github.com/Halpph/spotmap-releases/releases" data-i18n="all">All versions</a>
       &nbsp;·&nbsp; <a href="./privacy.html" data-i18n="priv">Privacy Policy</a>
@@ -245,6 +269,7 @@
         s2: 'Android asks to allow <span>“Install unknown apps”</span> for your browser the first time — allow it, then tap <strong>Install</strong>.',
         s3: "If Play Protect shows a warning, choose <span>“Install anyway”</span>. That's normal for apps outside the Play Store.",
         note: 'Updates: the app tells you when a new version is out and brings you back here. Downloading again upgrades in place.',
+        chlog: "What's new", latest: 'Latest',
         all: 'All versions', priv: 'Privacy Policy', ios: 'iPhone not supported yet.'
       },
       it: {
@@ -262,6 +287,7 @@
         s2: 'La prima volta Android chiede di consentire <span>“Installa app sconosciute”</span> per il browser — consenti, poi tocca <strong>Installa</strong>.',
         s3: 'Se Play Protect mostra un avviso, scegli <span>“Installa comunque”</span>. È normale per le app fuori dal Play Store.',
         note: "Aggiornamenti: l'app ti avvisa quando esce una nuova versione e ti riporta qui. Scaricando di nuovo si aggiorna senza disinstallare.",
+        chlog: 'Novità', latest: 'Ultima',
         all: 'Tutte le versioni', priv: 'Privacy policy', ios: 'iPhone non ancora supportato.'
       },
       es: {
@@ -279,6 +305,7 @@
         s2: 'La primera vez Android pide permitir <span>“Instalar apps desconocidas”</span> para tu navegador — permítelo y toca <strong>Instalar</strong>.',
         s3: 'Si Play Protect muestra una advertencia, elige <span>“Instalar de todos modos”</span>. Es normal en apps fuera de Play Store.',
         note: 'Actualizaciones: la app te avisa cuando hay una nueva versión y te trae de vuelta aquí. Al descargar de nuevo se actualiza sin desinstalar.',
+        chlog: 'Novedades', latest: 'Última',
         all: 'Todas las versiones', priv: 'Política de privacidad', ios: 'iPhone aún no compatible.'
       },
       pt: {
@@ -296,6 +323,7 @@
         s2: 'Na primeira vez, o Android pede para permitir <span>“Instalar apps desconhecidos”</span> no seu navegador — permita e toque em <strong>Instalar</strong>.',
         s3: 'Se o Play Protect mostrar um aviso, escolha <span>“Instalar mesmo assim”</span>. Isso é normal para apps fora da Play Store.',
         note: 'Atualizações: o app avisa quando sai uma nova versão e traz você de volta aqui. Baixar de novo atualiza sem desinstalar.',
+        chlog: 'Novidades', latest: 'Mais recente',
         all: 'Todas as versões', priv: 'Política de privacidade', ios: 'iPhone ainda não suportado.'
       },
       fr: {
@@ -313,12 +341,14 @@
         s2: "La première fois, Android demande d'autoriser <span>« Installer des applis inconnues »</span> pour votre navigateur — autorisez, puis touchez <strong>Installer</strong>.",
         s3: "Si Play Protect affiche un avertissement, choisissez <span>« Installer quand même »</span>. C'est normal pour les applis hors Play Store.",
         note: "Mises à jour : l'appli vous prévient quand une nouvelle version sort et vous ramène ici. Retélécharger met à jour sans désinstaller.",
+        chlog: 'Nouveautés', latest: 'Dernière',
         all: 'Toutes les versions', priv: 'Politique de confidentialité', ios: 'iPhone pas encore pris en charge.'
       }
     };
     var LANGS = ['en', 'it', 'es', 'pt', 'fr'];
     var lang = 'en';
-    var release = null; // { tag, published_at } once the GitHub API answers
+    var release = null;  // { tag, published_at } of the newest release once the GitHub API answers
+    var releases = [];   // every published release, newest first (for the changelog)
 
     function pickLang() {
       var q = new URLSearchParams(location.search).get('lang');
@@ -335,10 +365,53 @@
     function renderVersion() {
       var el = document.getElementById('version');
       if (!release) { el.textContent = I18N[lang].ver; return; }
-      var date = release.published_at
-        ? new Date(release.published_at).toLocaleDateString(lang, { year: 'numeric', month: 'short', day: 'numeric' })
-        : '';
+      var date = fmtDate(release.published_at);
       el.innerHTML = '<strong>' + release.tag + '</strong>' + (date ? ' · ' + date : '');
+    }
+
+    function fmtDate(iso) {
+      return iso ? new Date(iso).toLocaleDateString(lang, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+    }
+    function esc(str) {
+      return String(str).replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    }
+    // Release notes are plain text / light markdown (the git tag message):
+    // "- item" lines become a list, other lines become paragraphs. A leading
+    // line that just repeats the release name is dropped.
+    function notesToHtml(body, tag) {
+      var lines = String(body || '').split(/\r?\n/);
+      var html = '', items = [], para = [];
+      function flushItems() { if (items.length) { html += '<ul>' + items.join('') + '</ul>'; items = []; } }
+      function flushPara() { if (para.length) { html += '<p>' + esc(para.join(' ')) + '</p>'; para = []; } }
+      lines.forEach(function (line, i) {
+        var t = line.trim();
+        if (!t) { flushPara(); flushItems(); return; }          // blank line ends a block
+        if (i === 0 && (t === tag || t === 'SpotMap ' + tag)) return;
+        var m = t.match(/^[-*•]\s+(.*)$/);
+        if (m) { flushPara(); items.push('<li>' + esc(m[1]) + '</li>'); return; }
+        flushItems();
+        para.push(t.replace(/^#+\s*/, ''));                  // hard-wrapped lines join
+      });
+      flushPara(); flushItems();
+      return html;
+    }
+
+    function renderChangelog() {
+      var sec = document.getElementById('changelog');
+      var list = document.getElementById('releases');
+      if (!releases.length) { sec.classList.remove('has'); return; }
+      list.innerHTML = releases.map(function (r, i) {
+        var date = fmtDate(r.published_at);
+        return '<article class="rel">' +
+          '<div class="rel-head"><span class="rel-tag">' + esc(r.tag) + '</span>' +
+          (date ? '<span class="rel-date">' + esc(date) + '</span>' : '') +
+          (i === 0 ? '<span class="rel-new">' + esc(I18N[lang].latest) + '</span>' : '') +
+          '</div>' + notesToHtml(r.body, r.tag) +
+          '</article>';
+      }).join('');
+      sec.classList.add('has');
     }
 
     function applyLang(code) {
@@ -357,6 +430,7 @@
         if (t[k]) el.innerHTML = t[k];
       });
       renderVersion();
+      renderChangelog();
       document.querySelectorAll('#langs button').forEach(function (b) {
         b.setAttribute('aria-current', b.getAttribute('data-lang') === lang ? 'true' : 'false');
       });
@@ -377,15 +451,21 @@
     })();
     applyLang(pickLang());
 
-    // ---- Newest release tag + date, straight from the GitHub API (public repo).
-    fetch('https://api.github.com/repos/Halpph/spotmap-releases/releases/latest')
+    // ---- Releases, straight from the GitHub API (public repo): the newest one
+    // feeds the version line under the button, the whole list the changelog.
+    fetch('https://api.github.com/repos/Halpph/spotmap-releases/releases?per_page=20')
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (rel) {
-        if (!rel || !rel.tag_name) return;
-        release = { tag: rel.tag_name, published_at: rel.published_at };
+      .then(function (list) {
+        if (!Array.isArray(list)) return;
+        releases = list
+          .filter(function (r) { return r && r.tag_name && !r.draft && !r.prerelease; })
+          .map(function (r) { return { tag: r.tag_name, published_at: r.published_at, body: r.body || '' }; });
+        if (!releases.length) return;
+        release = { tag: releases[0].tag, published_at: releases[0].published_at };
         renderVersion();
+        renderChangelog();
       })
-      .catch(function () { /* leave the fallback text */ });
+      .catch(function () { /* leave the fallback text, changelog stays hidden */ });
 
     // Screenshots are optional: show the strip only for images that actually load.
     (function () {
