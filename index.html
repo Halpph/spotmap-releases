@@ -3,8 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SpotMap — download</title>
-  <meta name="description" content="SpotMap — see where your friends are and what's happening this weekend. Download the Android app." />
+  <title>SpotMap — download for Android</title>
+  <meta name="description" content="SpotMap — see where your friends are and what's happening this weekend, on one live map. Download the Android app." />
+  <meta name="theme-color" content="#0E0D14" />
+  <link rel="icon" href="./favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <meta property="og:title" content="SpotMap" />
+  <meta property="og:description" content="See where your friends are and what's happening this weekend — on one live map." />
+  <meta property="og:image" content="https://halpph.github.io/spotmap-releases/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
   <style>
     :root {
       --bg: #0E0D14;
@@ -14,89 +22,222 @@
       --muted: #9c98ad;
       --accent: #7c5cff;
       --accent-2: #4dd0e1;
+      --pink: #ff4d6d;
+      --mint: #3ddc97;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      background: radial-gradient(1200px 600px at 50% -10%, #1b1830 0%, var(--bg) 60%);
+      background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 20px;
+      line-height: 1.5;
+      overflow-x: hidden;
     }
-    .wrap { width: 100%; max-width: 460px; text-align: center; }
-    .logo {
-      width: 84px; height: 84px; margin: 0 auto 22px;
-      border-radius: 22px;
-      background: linear-gradient(140deg, var(--accent), var(--accent-2));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 42px; box-shadow: 0 12px 40px rgba(124, 92, 255, 0.35);
+    /* Neon street grid, echoing the icon's map background */
+    .sky {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(900px 520px at 50% -8%, rgba(124, 92, 255, 0.35) 0%, transparent 60%),
+        radial-gradient(700px 420px at 85% 30%, rgba(77, 208, 225, 0.18) 0%, transparent 60%),
+        radial-gradient(600px 400px at 10% 70%, rgba(255, 77, 109, 0.12) 0%, transparent 60%),
+        linear-gradient(rgba(77, 208, 225, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77, 208, 225, 0.05) 1px, transparent 1px);
+      background-size: auto, auto, auto, 56px 56px, 56px 56px;
     }
-    h1 { font-size: 34px; margin: 0 0 8px; letter-spacing: -0.02em; }
-    .tag { color: var(--muted); font-size: 16px; margin: 0 0 32px; line-height: 1.5; }
+    .wrap { width: 100%; max-width: 920px; margin: 0 auto; padding: 56px 20px 64px; }
+
+    /* Hero */
+    .hero { display: flex; align-items: center; gap: 36px; }
+    .hero-text { flex: 1; min-width: 0; }
+    .icon-wrap { position: relative; flex: 0 0 auto; }
+    .icon-wrap::before {
+      content: ""; position: absolute; inset: -18%; border-radius: 50%; z-index: -1;
+      background: conic-gradient(from 180deg, var(--accent), var(--accent-2), var(--pink), var(--accent));
+      filter: blur(38px); opacity: 0.55;
+    }
+    .icon {
+      display: block; width: 200px; height: 200px;
+      border-radius: 22.5%; /* Android adaptive-icon squircle-ish */
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent-2); margin-bottom: 14px;
+    }
+    .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 12px var(--mint); }
+    h1 { font-size: 52px; line-height: 1; margin: 0 0 14px; letter-spacing: -0.03em; }
+    .tag { color: var(--muted); font-size: 19px; margin: 0 0 30px; max-width: 480px; }
+    .cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; gap: 10px;
       background: linear-gradient(140deg, var(--accent), #6a4bff);
       color: #fff; text-decoration: none; font-weight: 600; font-size: 17px;
-      padding: 16px 30px; border-radius: 14px;
+      padding: 16px 28px; border-radius: 14px;
       box-shadow: 0 10px 30px rgba(124, 92, 255, 0.4);
       transition: transform .12s ease, box-shadow .12s ease;
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(124, 92, 255, 0.5); }
-    .ver { margin-top: 14px; font-size: 13px; color: var(--muted); min-height: 18px; }
-    .card {
-      margin-top: 30px; background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 20px 22px; text-align: left;
+    .btn svg { width: 20px; height: 20px; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(124, 92, 255, 0.55); }
+    .ver { font-size: 13px; color: var(--muted); }
+    .ver strong { color: var(--text); font-weight: 600; }
+
+    /* Screenshots (optional: shows whichever files exist in ./screens/) */
+    .shots { display: none; margin-top: 64px; }
+    .shots.has { display: block; }
+    .shots-row {
+      display: flex; gap: 18px; justify-content: center; align-items: flex-end;
+      overflow-x: auto; padding: 12px 4px 20px; scroll-snap-type: x mandatory;
     }
-    .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 12px; }
-    .card ol { margin: 0; padding-left: 20px; color: var(--text); font-size: 14px; line-height: 1.7; }
-    .card ol span { color: var(--muted); }
-    .foot { margin-top: 28px; font-size: 13px; color: var(--muted); }
+    .shot {
+      flex: 0 0 auto; scroll-snap-align: center; width: 230px;
+      border-radius: 28px; padding: 8px; background: #08070c;
+      border: 1px solid #2b2838;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(124, 92, 255, 0.12);
+    }
+    .shot img { display: block; width: 100%; border-radius: 22px; }
+    .shot.hide { display: none; }
+
+    /* Features */
+    .features { margin-top: 64px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .feat {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px 22px;
+      position: relative; overflow: hidden;
+    }
+    .feat::after {
+      content: ""; position: absolute; right: -40px; top: -40px; width: 120px; height: 120px; border-radius: 50%;
+      background: var(--glow, var(--accent)); opacity: 0.12; filter: blur(30px);
+    }
+    .feat .ico { font-size: 26px; margin-bottom: 10px; line-height: 1; }
+    .feat h3 { margin: 0 0 6px; font-size: 16px; letter-spacing: -0.01em; }
+    .feat p { margin: 0; font-size: 14px; color: var(--muted); }
+
+    /* Install */
+    .card {
+      margin-top: 40px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 22px 24px;
+    }
+    .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 14px; }
+    .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 12px; }
+    .steps li { counter-increment: s; display: flex; gap: 14px; align-items: flex-start; font-size: 15px; }
+    .steps li::before {
+      content: counter(s); flex: 0 0 26px; height: 26px; border-radius: 50%; font-size: 13px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(124, 92, 255, 0.18); color: #b8a8ff; border: 1px solid rgba(124, 92, 255, 0.35);
+    }
+    .steps span { color: var(--muted); }
+    .note { margin-top: 14px; font-size: 13px; color: var(--muted); }
+
+    .foot { margin-top: 40px; font-size: 13px; color: var(--muted); text-align: center; }
     .foot a { color: var(--accent-2); text-decoration: none; }
+    .foot a:hover { text-decoration: underline; }
+
+    @media (max-width: 680px) {
+      .wrap { padding-top: 40px; }
+      .hero { flex-direction: column; text-align: center; gap: 26px; }
+      .hero-text { width: 100%; }
+      .icon { width: 148px; height: 148px; }
+      .tag { margin-left: auto; margin-right: auto; }
+      .cta { justify-content: center; }
+      h1 { font-size: 42px; }
+      .features { grid-template-columns: 1fr; }
+      .shot { width: 200px; }
+    }
   </style>
 </head>
 <body>
+  <div class="sky" aria-hidden="true"></div>
   <main class="wrap">
-    <div class="logo">📍</div>
-    <h1>SpotMap</h1>
-    <p class="tag">See where your friends are and what's happening this weekend — on one live map.</p>
+    <section class="hero">
+      <div class="icon-wrap">
+        <img class="icon" src="./icon-512.png" width="200" height="200" alt="SpotMap app icon: a capybara holding a disco ball over a neon city map" />
+      </div>
+      <div class="hero-text">
+        <div class="eyebrow">Android · free</div>
+        <h1>SpotMap</h1>
+        <p class="tag">See where your friends are and what's happening this weekend — on one live map.</p>
+        <div class="cta">
+          <a class="btn" id="download" href="https://github.com/Halpph/spotmap-releases/releases/latest/download/spotmap.apk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download for Android
+          </a>
+          <div class="ver" id="version">Latest release</div>
+        </div>
+      </div>
+    </section>
 
-    <a class="btn" id="download" href="https://github.com/Halpph/spotmap-releases/releases/latest/download/spotmap.apk">
-      ⬇&nbsp; Download for Android
-    </a>
-    <div class="ver" id="version">latest release</div>
+    <section class="shots" id="shots" aria-label="Screenshots">
+      <div class="shots-row">
+        <figure class="shot"><img src="./screens/map.png" alt="Live map with friends and plans" loading="lazy" /></figure>
+        <figure class="shot"><img src="./screens/plans.png" alt="Weekend plans list" loading="lazy" /></figure>
+        <figure class="shot"><img src="./screens/friends.png" alt="Friends and who's going" loading="lazy" /></figure>
+      </div>
+    </section>
+
+    <section class="features" aria-label="Features">
+      <div class="feat" style="--glow: var(--accent-2)">
+        <div class="ico">🗺️</div>
+        <h3>One live map</h3>
+        <p>Friends' pins, the way they're facing, and every plan for the weekend — all in one place.</p>
+      </div>
+      <div class="feat" style="--glow: var(--pink)">
+        <div class="ico">🔗</div>
+        <h3>Share a link, get a plan</h3>
+        <p>Share an event from Instagram, Resident Advisor or Eventbrite and SpotMap fills in the venue, time and cover.</p>
+      </div>
+      <div class="feat" style="--glow: var(--mint)">
+        <div class="ico">🪩</div>
+        <h3>Who's going</h3>
+        <p>Tap a plan to see the roster, join in, and get a nudge when friends post something new.</p>
+      </div>
+      <div class="feat" style="--glow: var(--accent)">
+        <div class="ico">🔒</div>
+        <h3>Your circle only</h3>
+        <p>Location is shared with accepted friends, stops when you say so, and your account can be deleted in one tap.</p>
+      </div>
+    </section>
 
     <section class="card">
-      <h2>Installing the APK</h2>
-      <ol>
-        <li>Tap <strong>Download for Android</strong> above.</li>
-        <li>Open the downloaded <span>spotmap.apk</span> file.</li>
-        <li>If prompted, allow <span>“Install unknown apps”</span> for your browser, then tap <strong>Install</strong>.</li>
-        <li>Updates: come back here and download again — it upgrades in place.</li>
+      <h2>Installing</h2>
+      <ol class="steps">
+        <li><div>Tap <strong>Download for Android</strong> above and open <span>spotmap.apk</span> when it finishes.</div></li>
+        <li><div>Android asks to allow <span>“Install unknown apps”</span> for your browser the first time — allow it, then tap <strong>Install</strong>.</div></li>
+        <li><div>If Play Protect shows a warning, choose <span>“Install anyway”</span>. That's normal for apps outside the Play Store.</div></li>
       </ol>
+      <p class="note">Updates: the app tells you when a new version is out and brings you back here. Downloading again upgrades in place.</p>
     </section>
 
     <p class="foot">
-      All versions on <a href="https://github.com/Halpph/spotmap-releases/releases">GitHub</a>.
-      iPhone not supported yet.
-      <br /><a href="./privacy.html">Privacy Policy</a>
+      <a href="https://github.com/Halpph/spotmap-releases/releases">All versions</a>
+      &nbsp;·&nbsp; <a href="./privacy.html">Privacy Policy</a>
+      &nbsp;·&nbsp; iPhone not supported yet.
     </p>
   </main>
 
   <script>
-    // Show the newest release tag + date, straight from the GitHub API.
+    // Newest release tag + date, straight from the GitHub API (public repo).
     fetch('https://api.github.com/repos/Halpph/spotmap-releases/releases/latest')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (rel) {
         if (!rel || !rel.tag_name) return;
         var el = document.getElementById('version');
         var date = rel.published_at ? new Date(rel.published_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
-        el.textContent = rel.tag_name + (date ? ' · ' + date : '');
+        el.innerHTML = '<strong>' + rel.tag_name + '</strong>' + (date ? ' · ' + date : '');
       })
       .catch(function () { /* leave the fallback text */ });
+
+    // Screenshots are optional: show the strip only for images that actually load.
+    (function () {
+      var shots = document.getElementById('shots');
+      var imgs = shots.querySelectorAll('img');
+      imgs.forEach(function (img) {
+        img.addEventListener('load', function () { shots.classList.add('has'); });
+        img.addEventListener('error', function () { img.parentNode.classList.add('hide'); });
+        if (img.complete && img.naturalWidth > 0) shots.classList.add('has');
+      });
+    })();
   </script>
 </body>
 </html>
